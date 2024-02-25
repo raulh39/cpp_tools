@@ -7,7 +7,6 @@ import git
 import os
 import subprocess
 from jinja2 import Environment, FileSystemLoader
-import os
 
 
 def parse_arguments():
