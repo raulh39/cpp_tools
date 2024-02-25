@@ -6,6 +6,8 @@ import argparse
 import git
 import os
 import subprocess
+from jinja2 import Environment, FileSystemLoader
+import os
 
 
 def parse_arguments():
@@ -30,53 +32,23 @@ def create_directories(args):
 
 
 def create_files(args, cmake_version):
-    with open(args.dir + "/conanfile.txt", "w") as conanfile:
-        conanfile.write("[requires]\n")
-        conanfile.write("boost/1.84.0\n")
-        conanfile.write("\n")
-        conanfile.write("[generators]\n")
-        conanfile.write("CMakeDeps\n")
-        conanfile.write("CMakeToolchain\n")
-
-    with open(args.dir + "/CMakeLists.txt", "w") as cmakelists:
-        cmakelists.write(f"cmake_minimum_required(VERSION {cmake_version})\n")
-        cmakelists.write(f"project({args.name} VERSION 0.1.0 LANGUAGES CXX)\n")
-        cmakelists.write("\n")
-        cmakelists.write("set(CMAKE_EXPORT_COMPILE_COMMANDS ON)\n")
-        cmakelists.write("\n")
-        cmakelists.write("find_package(Boost REQUIRED CONFIG)\n")
-        cmakelists.write("\n")
-        cmakelists.write(f"add_executable({args.name} src/main.cpp)\n")
-        cmakelists.write(f"set_property(TARGET {args.name} PROPERTY CXX_STANDARD {args.std})\n")
-        cmakelists.write(f"set_property(TARGET {args.name} PROPERTY CXX_EXTENSIONS OFF)\n")
-        cmakelists.write(f"target_link_libraries({args.name} PUBLIC Boost::headers)\n")
-
-    with open(args.dir + "/src/main.cpp", "w") as mainfile:
-        mainfile.write("#include <iostream>\n")
-        mainfile.write("\n")
-        mainfile.write("int main()\n")
-        mainfile.write("{\n")
-        mainfile.write('  std::cout << "Hello world\\n";\n')
-        mainfile.write("}\n")
-
-    with open(args.dir + "/.gitignore", "w") as gitignore:
-        gitignore.write("build\n")
-        gitignore.write(".cache/clangd/index\n")
-        gitignore.write("CMakeUserPresets.json\n")
-
-    with open(args.dir + "/README.md", "w") as readme:
-        readme.write("# How to compile\n")
-        readme.write("```\n")
-        readme.write("conan install . --output-folder=build --build=missing")
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    env = Environment(loader=FileSystemLoader(f"{dir_path}/templates/creation"))
+    file_list = [
+        "conanfile.txt",
+        "CMakeLists.txt",
+        "src/main.cpp",
+        ".gitignore",
+        "README.md",
+    ]
+    for template_file in file_list:
+        template = env.get_template(template_file)
+        profile = ""
         if args.profile:
-            readme.write(f" -pr:b {args.profile} -pr {args.profile}")
-        readme.write("\ncmake --preset=conan-debug\n")
-        readme.write("cmake --build --preset=conan-debug\n")
-        readme.write("```\n")
-        readme.write("# How to execute\n")
-        readme.write("```\n")
-        readme.write(f"build/{args.name}\n")
-        readme.write("```\n")
+            profile = f" -pr:b {args.profile} -pr {args.profile}"
+        output = template.render(name=args.name, standard=args.std, cmake_version=cmake_version, profile=profile)
+        with open(args.dir + f"/{template_file}", "w") as f:
+            f.write(output)
 
 
 def check_conan():
