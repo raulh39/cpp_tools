@@ -7,6 +7,7 @@ import git
 import os
 import subprocess
 from jinja2 import Environment, FileSystemLoader
+from os import path, walk
 
 
 def parse_arguments():
@@ -30,16 +31,16 @@ def create_directories(args):
         print(f'error: directory "{args.dir}" already exists. Use "-f" to overwrite it.')
 
 
-def create_files(args, cmake_version):
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    env = Environment(loader=FileSystemLoader(f"{dir_path}/templates/creation"))
-    file_list = [
-        "conanfile.txt",
-        "CMakeLists.txt",
-        "src/main.cpp",
-        ".gitignore",
-        "README.md",
-    ]
+def get_all_files(maindir):
+    result = []
+    for dirpath, _, filenames in walk(maindir):
+        for f in filenames:
+            result.append(path.relpath(path.join(dirpath, f), maindir))
+    return result
+
+
+def create_files(args, cmake_version, maindir, file_list):
+    env = Environment(loader=FileSystemLoader(maindir), keep_trailing_newline=True)
     profile = ""
     if args.profile:
         profile = f" -pr:b {args.profile} -pr {args.profile}"
@@ -82,18 +83,10 @@ def check_cmake():
     return False
 
 
-def git_init(args):
+def git_init(args, file_list):
     try:
         repo = git.Repo.init(args.dir)
-        repo.index.add(
-            [
-                "conanfile.txt",
-                "CMakeLists.txt",
-                "src/main.cpp",
-                ".gitignore",
-                "README.md",
-            ]
-        )
+        repo.index.add(file_list)
         repo.index.commit("Initial commit")
     except git.GitCommandError as e:
         print(f"error initializing Git repository: {e}")
@@ -106,10 +99,13 @@ def main():
     cmake_version = check_cmake()
     if not cmake_version:
         return
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    maindir = f"{dir_path}/templates/creation"
+    file_list = get_all_files(maindir)
     create_directories(args)
-    create_files(args, cmake_version)
+    create_files(args, cmake_version, maindir, file_list)
     if not args.no_git:
-        git_init(args)
+        git_init(args, file_list)
 
 
 if __name__ == "__main__":
