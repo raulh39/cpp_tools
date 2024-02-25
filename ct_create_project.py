@@ -41,11 +41,11 @@ def create_files(args, cmake_version):
         ".gitignore",
         "README.md",
     ]
+    profile = ""
+    if args.profile:
+        profile = f" -pr:b {args.profile} -pr {args.profile}"
     for template_file in file_list:
         template = env.get_template(template_file)
-        profile = ""
-        if args.profile:
-            profile = f" -pr:b {args.profile} -pr {args.profile}"
         output = template.render(name=args.name, standard=args.std, cmake_version=cmake_version, profile=profile)
         with open(args.dir + f"/{template_file}", "w") as f:
             f.write(output)
