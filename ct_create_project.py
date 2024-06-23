@@ -1,6 +1,13 @@
-#!/usr/bin/env python3
+#! /usr/bin/env -S pipx run
 # This will create a folder with the bare minimum for a C++ project
 # that uses Conan 2 and CMake to create a Hello World executable
+
+# /// script
+# dependencies = [
+#   "GitPython",
+#   "Jinja2"
+# ]
+# ///
 
 import argparse
 import git
