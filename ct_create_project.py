@@ -51,9 +51,12 @@ def create_files(args, cmake_version, maindir, file_list):
     profile = ""
     if args.profile:
         profile = f" -pr:b {args.profile} -pr {args.profile}"
+    cmake_split = cmake_version.split('.')
     for template_file in file_list:
         template = env.get_template(template_file)
-        output = template.render(name=args.name, standard=args.std, cmake_version=cmake_version, profile=profile)
+        output = template.render(name=args.name, standard=args.std, cmake_version=cmake_version, profile=profile,
+                                 cmake_version_major=cmake_split[0], cmake_version_minor=cmake_split[1], cmake_version_patch=cmake_split[2]
+        )
         with open(args.dir + f"/{template_file}", "w") as f:
             f.write(output)
 

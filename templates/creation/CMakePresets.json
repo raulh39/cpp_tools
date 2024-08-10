@@ -1,0 +1,27 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": {{cmake_version_major}},
+        "minor": {{cmake_version_minor}},
+        "patch": {{cmake_version_patch}}
+    },
+    "configurePresets": [
+        {
+            "name": "Debug",
+            "displayName": "Debug Config",
+            "description": "Debug config",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "${sourceDir}/conan_provider.cmake"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "Debug",
+            "configurePreset": "Debug"
+        }
+    ]
+}
