@@ -7,14 +7,32 @@
     },
     "configurePresets": [
         {
-            "name": "Debug",
-            "displayName": "Debug Config",
-            "description": "Debug config",
-            "binaryDir": "${sourceDir}/build",
+            "name": "BasePreset",
+            "description": "Base configuration",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "${sourceDir}/conan_provider.cmake"
+                "CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "conan_provider.cmake"
+            }
+        },
+        {
+            "name": "Debug",
+            "inherits": "BasePreset",
+            "displayName": "Debug Config",
+            "description": "Debug config",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "RelWithDebInfo",
+            "inherits": "BasePreset",
+            "displayName": "RelWithDebInfo Config",
+            "description": "RelWithDebInfo config",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
             }
         }
     ],
@@ -22,6 +40,10 @@
         {
             "name": "Debug",
             "configurePreset": "Debug"
+        },
+        {
+            "name": "RelWithDebInfo",
+            "configurePreset": "RelWithDebInfo"
         }
     ]
 }

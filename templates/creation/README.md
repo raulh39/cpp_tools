@@ -1,9 +1,21 @@
-# How to compile
+# Compiling in Debug mode
+## How to compile
 ```
-cmake -B build -S . --preset=Debug
+cmake . --preset=Debug
 cmake --build --preset=Debug
 ```
-# How to execute
+## How to execute
 ```
-build/{{name}}
+build/Debug/{{name}}
+```
+
+# Compiling in RelWithDebInfo mode
+## How to compile
+```
+cmake . --preset=RelWithDebInfo
+cmake --build --preset=RelWithDebInfo
+```
+## How to execute
+```
+build/RelWithDebInfo/{{name}}
 ```
