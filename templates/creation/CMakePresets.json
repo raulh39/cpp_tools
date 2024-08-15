@@ -14,7 +14,9 @@
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "conan_provider.cmake"
+                "CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "conan_provider.cmake",
+                "CMAKE_CXX_STANDARD": "23",
+                "CMAKE_CXX_EXTENSIONS": "OFF"
             }
         },
         {
@@ -23,7 +25,8 @@
             "displayName": "Debug Config",
             "description": "Debug config",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CXX_FLAGS": "-Wall -Werror"
             }
         },
         {
