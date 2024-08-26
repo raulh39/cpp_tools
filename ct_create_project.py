@@ -14,7 +14,7 @@ import git
 import os
 import subprocess
 from jinja2 import Environment, FileSystemLoader
-from os import path, walk
+from os import path, walk, makedirs
 from urllib.request import urlretrieve 
 
 def parse_arguments():
@@ -30,13 +30,6 @@ def parse_arguments():
     if not args.dir:
         args.dir = args.name
     return args
-
-
-def create_directories(args):
-    try:
-        os.makedirs(args.dir + "/src", exist_ok=args.force)
-    except FileExistsError:
-        print(f'error: directory "{args.dir}" already exists. Use "-f" to overwrite it.')
 
 
 def get_all_files(maindir):
@@ -58,7 +51,10 @@ def create_files(args, cmake_version, maindir, file_list):
         output = template.render(name=args.name, standard=args.std, cmake_version=cmake_version, profile=profile,
                                  cmake_version_major=cmake_split[0], cmake_version_minor=cmake_split[1], cmake_version_patch=cmake_split[2]
         )
-        with open(args.dir + f"/{template_file}", "w") as f:
+        abs_path = f"{args.dir}/{template_file}"
+        directory = path.dirname(abs_path)
+        makedirs(directory, exist_ok=True)
+        with open(abs_path, "w") as f:
             f.write(output)
 
 
@@ -122,7 +118,6 @@ def main():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     maindir = f"{dir_path}/templates/creation"
     file_list = get_all_files(maindir)
-    create_directories(args)
     create_files(args, cmake_version, maindir, file_list)
     if not args.no_update_provider:
         update_provider(args)
