@@ -19,13 +19,16 @@ from urllib.request import urlretrieve
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Create C++, CMake, Conan2 project")
-    parser.add_argument("name", help="Executable that will be compiled")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("name", nargs='?', help="Executable that will be compiled")
+    group.add_argument("--list-templates", action="store_true", help="Print the list of templates that can be used and exit")
     parser.add_argument("--dir", default=None, help="directory to create (default: value of 'name' parameter)")
     parser.add_argument("-f", "--force", action="store_true", help="overwrite existing directories and/or files")
     parser.add_argument("--std", type=str, default="23", help="C++ standard to use (default: '23')")
     parser.add_argument("--profile", type=str, default=None, help="Conan profile to use")
     parser.add_argument("--no-git", action="store_true", help="Do not initialize the directory with git")
     parser.add_argument("--no-update-provider", action="store_true", help="Do not try to download latest version of conan_provider.cmake")
+    parser.add_argument("--template", type=str, default="basic", help="Type of template to use (default='basic')")
     args = parser.parse_args()
     if not args.dir:
         args.dir = args.name
@@ -110,13 +113,18 @@ def update_provider(args):
 
 def main():
     args = parse_arguments()
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    if args.list_templates:
+        with open(f"{dir_path}/templates/list.txt", 'r') as f:
+            content = f.read()
+            print(content, end='')
+        return
     if not check_conan():
         return
     cmake_version = check_cmake()
     if not cmake_version:
         return
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    maindir = f"{dir_path}/templates/creation"
+    maindir = f"{dir_path}/templates/{args.template}"
     file_list = get_all_files(maindir)
     create_files(args, cmake_version, maindir, file_list)
     if not args.no_update_provider:
