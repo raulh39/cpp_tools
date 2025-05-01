@@ -1,3 +1,3 @@
-basic: A simple executable
-basic-np: A simple executable without conan provider
-with-lib: Exe + lib + test
+basic: A simple executable using Conan provider (not recommended anymore)
+with-lib: Exe + lib + test (not recommended anymore)
+basic-np: A simple executable without Conan provider
