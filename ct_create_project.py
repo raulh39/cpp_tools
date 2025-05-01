@@ -47,7 +47,7 @@ def create_files(args, cmake_version, maindir, file_list):
     env = Environment(loader=FileSystemLoader(maindir), keep_trailing_newline=True)
     profile = ""
     if args.profile:
-        profile = f" -pr:b {args.profile} -pr {args.profile}"
+        profile = f" --profile:all {args.profile}"
     cmake_split = cmake_version.split('.')
     for template_file in file_list:
         template = env.get_template(template_file)
