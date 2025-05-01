@@ -1,2 +1,3 @@
 basic: A simple executable
+basic-np: A simple executable without conan provider
 with-lib: Exe + lib + test
