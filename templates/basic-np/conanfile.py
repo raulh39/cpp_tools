@@ -6,7 +6,8 @@ class Pkg(ConanFile):
     generators = "CMakeDeps"
 
     def requirements(self):
-        self.requires("boost/1.84.0")
+        # self.requires("boost/1.84.0")
+        pass
 
     def build_requirements(self):
         pass
