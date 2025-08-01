@@ -10,9 +10,7 @@
             "toolchainFile": "build/conan_toolchain.cmake",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": { "type": "BOOL",   "value": true },
-                "CMAKE_CONFIGURATION_TYPES":     { "type": "STRING", "value": "Debug;Release" },
-                "CMAKE_CXX_FLAGS_RELEASE":       { "type": "STRING", "value": "-Wall -Werror" },
-                "CMAKE_CXX_FLAGS_DEBUG":         { "type": "STRING", "value": "-Wall -Werror" }
+                "CMAKE_CONFIGURATION_TYPES":     { "type": "STRING", "value": "Debug;Release" }
             }
         }
     ],
