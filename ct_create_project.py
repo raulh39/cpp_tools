@@ -85,7 +85,7 @@ def check_cmake():
             print(f"cmake returned error code {cmake.returncode}:\n{error.decode()}")
         for line in out.decode().splitlines():
             if line.startswith("cmake version "):
-                return line[14:]
+                return line[14:].split('-')[0]
     except FileNotFoundError:
         print("error: cmake command not found")
     except Exception as e:
