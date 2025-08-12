@@ -1,3 +1,4 @@
 basic: A simple executable using Conan provider (not recommended anymore)
 with-lib: Exe + lib + test (not recommended anymore)
 basic-np: A simple executable without Conan provider
+AoC: Template I'm using for Advent Of Code
