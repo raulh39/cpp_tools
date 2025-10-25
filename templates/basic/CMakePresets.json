@@ -26,7 +26,7 @@
             "description": "Debug config",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_CXX_FLAGS": "-Wall -Werror"
+                "CMAKE_CXX_FLAGS": "-Wall -Wextra -Werror"
             }
         },
         {
