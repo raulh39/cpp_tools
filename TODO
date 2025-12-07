@@ -1,0 +1,15 @@
+# Fix parameters --std and --profile
+This two arguments:
+    parser.add_argument("--std", type=str, default="23", help="C++ standard to use (default: '23')")
+    parser.add_argument("--profile", type=str, default=None, help="Conan profile to use")
+don't make any sense.
+It depends on the template being used the posibility, or obligation, of selecting the C++ standard or the Conan profile.
+
+For example, the "basic" template doesn't use "--std" but use "--profile"... and the profile should be present on developer's machine.
+But "basic-devcontainer" uses "--std" and should not use "--profile".
+
+My idea:
+Each template should list it's options.
+Instead of a "list.txt" file, I should have a "list.json" file that enables to list all the potential parameters needed.
+I don't know if that scalates enough. For example, "basic" should check that Conan is actually installed and that it actually has the "--profile" specified.
+That requires code, Python code. So a "list.json" maybe is not enough. Maybe a "plugin" system should be used and each template can add python code somehow.
