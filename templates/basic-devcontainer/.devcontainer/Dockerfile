@@ -8,7 +8,7 @@ FROM fedora:43
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN dnf -y update && dnf -y install \
-    clang \
+    clang-21 \
     llvm \
     lld \
     lldb \
