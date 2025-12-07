@@ -1,3 +1,0 @@
-build
-.cache/clangd/index
-CMakeUserPresets.json
