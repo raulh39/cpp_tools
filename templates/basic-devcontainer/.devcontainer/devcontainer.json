@@ -1,0 +1,20 @@
+{
+    "name": "{{name}}",
+    "dockerFile": "Dockerfile",
+    "runArgs": ["--name", "{{name}}"],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "akiramiyakoda.cppincludeguard",
+                "albymor.increment-selection",
+                "llvm-vs-code-extensions.vscode-clangd",
+                "ms-vscode.cmake-tools",
+                "ms-vscode.cpptools",
+                "twxs.cmake",
+                "Tyriar.sort-lines",
+                "vadimcn.vscode-lldb",
+                "xaver.clang-format"
+            ]
+        }
+    }
+}

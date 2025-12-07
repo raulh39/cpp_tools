@@ -1,0 +1,46 @@
+{
+    "version": 9,
+    "cmakeMinimumRequired": { "major": {{cmake_version_major}}, "minor": {{cmake_version_minor}}, "patch": {{cmake_version_patch}} },
+    "configurePresets": [
+        {
+            "name": "ctDefault",
+            "description": "Default configuration for project",
+            "generator": "Ninja Multi-Config",
+            "binaryDir": "${sourceDir}/build",
+            "toolchainFile": "build/conan_toolchain.cmake",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": { "type": "BOOL",   "value": true },
+                "CMAKE_CONFIGURATION_TYPES":     { "type": "STRING", "value": "Debug;Release" },
+                "CMAKE_CXX_FLAGS":               { "type": "STRING", "value": "-Wall -Wextra -Werror"}
+            }
+        }
+    ],
+    "buildPresets": [
+        { "name": "ctDebug",   "configurePreset": "ctDefault", "configuration": "Debug" },
+        { "name": "ctRelease", "configurePreset": "ctDefault", "configuration": "Release" }
+    ],
+    "workflowPresets": [
+        {
+            "name": "ctDebug",
+            "steps": [
+                { "type": "configure", "name": "ctDefault" },
+                { "type": "build", "name": "ctDebug" }
+            ]
+        },
+        {
+            "name": "ctRelease",
+            "steps": [
+                { "type": "configure", "name": "ctDefault" },
+                { "type": "build", "name": "ctRelease" }
+            ]
+        },
+        {
+            "name": "ctAll",
+            "steps": [
+                { "type": "configure", "name": "ctDefault" },
+                { "type": "build", "name": "ctDebug" },
+                { "type": "build", "name": "ctRelease" }
+            ]
+        }
+    ]
+}

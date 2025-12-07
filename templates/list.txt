@@ -1,3 +1,4 @@
 basic: A simple executable without Conan provider
+basic-devcontainer: A simple executable using a devcontainer with Conan and clang under Fedora
 with-lib: Exe + lib + test (not recommended anymore)
 AoC: Template I'm using for Advent Of Code
