@@ -27,7 +27,6 @@ def parse_arguments():
     parser.add_argument("--std", type=str, default="23", help="C++ standard to use (default: '23')")
     parser.add_argument("--profile", type=str, default=None, help="Conan profile to use")
     parser.add_argument("--no-git", action="store_true", help="Do not initialize the directory with git")
-    parser.add_argument("--no-update-provider", action="store_true", help="Do not try to download latest version of conan_provider.cmake")
     parser.add_argument("--template", type=str, default="basic", help="Type of template to use (default='basic')")
     args = parser.parse_args()
     if not args.dir:
@@ -102,15 +101,6 @@ def git_init(args, file_list):
         print(f"error initializing Git repository: {e}")
 
 
-def update_provider(args):
-    try:
-        remote_url = 'https://raw.githubusercontent.com/conan-io/cmake-conan/develop2/conan_provider.cmake'
-        local_file = f'{args.dir}/conan_provider.cmake'
-        urlretrieve(remote_url, filename=local_file)
-    except Exception as e:
-        print(f"error: unexpected error downloading conan_provider.cmake: {e}")
-
-
 def main():
     args = parse_arguments()
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -127,8 +117,6 @@ def main():
     maindir = f"{dir_path}/templates/{args.template}"
     file_list = get_all_files(maindir)
     create_files(args, cmake_version, maindir, file_list)
-    if not args.no_update_provider:
-        update_provider(args)
     if not args.no_git:
         git_init(args, file_list)
 
