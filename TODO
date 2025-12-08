@@ -10,6 +10,45 @@ But "basic-devcontainer" uses "--std" and should not use "--profile".
 
 My idea:
 Each template should list it's options.
-Instead of a "list.txt" file, I should have a "list.json" file that enables to list all the potential parameters needed.
+Instead of a "list.txt" file, I should have a "list.toml" file that enables to list all the potential parameters needed.
 I don't know if that scalates enough. For example, "basic" should check that Conan is actually installed and that it actually has the "--profile" specified.
-That requires code, Python code. So a "list.json" maybe is not enough. Maybe a "plugin" system should be used and each template can add python code somehow.
+That requires code, Python code. So a "list.toml" maybe is not enough. Maybe a "plugin" system should be used and each template can add python code somehow.
+
+# For basic-devcontainer: execute conan install
+
+I want Conan to be executed before vscode actually connects.
+What I mean is that I want this to be executed automatically:
+```
+conan install --output-folder build --build=missing -s build_type=Debug .
+conan install --output-folder build --build=missing -s build_type=Release .
+```
+Actually, I'm not sure this is a good idea...
+
+# For basic-devcontainer: clang-format file
+
+# For basic-devcontainer: I don't have a launch.json file prepared so I can't debug
+For example:
+```
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug under lldb",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        }
+    ]
+}
+```
+
+# Stackables templates
+
+It seems like a good idea to be able to share some common files between different templates. For example, the main.cpp used as an example. Or the clang-format file.
+Of course I can start using symbolic links between templates (and most probably that is what I am going to do). But in Windows this is not a good idea, for example.
+And it seems... well, incorrect.
+
+So maybe it is a good idea to be able that a template could be based on another template. Much like CMake Presets.
+I'm pretty sure that I would need to change list.txt to list.toml (or JSON)... so it should be not that difficult to be able to specify that things there.
